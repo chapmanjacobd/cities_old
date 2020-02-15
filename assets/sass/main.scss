@@ -1,0 +1,680 @@
+@import 'libs/vars';
+@import 'libs/functions';
+@import 'libs/mixins';
+@import 'libs/vendor';
+@import 'libs/breakpoints';
+@import 'libs/html-grid';
+@import 'fontawesome-all.min.css';
+
+/*
+	Hyperspace by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+// Breakpoints.
+
+@include breakpoints((
+		xlarge:   ( 1281px,  1680px ),
+		large:    ( 981px,   1280px ),
+		medium:   ( 737px,   980px  ),
+		small:    ( 481px,   736px  ),
+		xsmall:   ( 361px,   480px  ),
+		xxsmall:  ( null,    360px  )
+	));
+
+// Base.
+
+@import 'base/reset';
+@import 'base/page';
+@import 'base/typography';
+
+// Component.
+
+@import 'components/row';
+@import 'components/box';
+@import 'components/button';
+@import 'components/features';
+@import 'components/form';
+@import 'components/icon';
+@import 'components/image';
+@import 'components/list';
+@import 'components/actions';
+@import 'components/contact';
+@import 'components/icons';
+@import 'components/menu';
+@import 'components/section';
+@import 'components/split';
+@import 'components/spotlights';
+@import 'components/table';
+@import 'components/wrapper';
+
+// Layout.
+
+@import 'layout/header';
+@import 'layout/wrapper';
+@import 'layout/footer';
+@import 'layout/sidebar';
+@import 'layout/intro';
+
+// DatePicker
+
+input,
+select,
+textarea {
+    color: black;
+    border: 1px solid #d0d0d0;
+    padding: 6px 8px;
+}
+
+$doubleViewWidth: 650px;
+$calendarViewHeight: 320px;
+$doubleViewPadding: 0 25px 10px 25px;
+
+.date-time-picker,
+.date-range-picker {
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+    --white: #ffffff;
+    --black: #000000;
+    --brand-accent: #d71a21;
+    --brand-accent-light: #f7d1d2;
+    --brand-accent-lightest: #fbe9e9;
+    --brand-primary: #006698;
+    --concrete-grey: #9b9b9b;
+    --off-white: #f6f6f6;
+    --rich-grey: #4a4a4a;
+    --regular-weight: 400;
+    --medium-weight: 500;
+    position: absolute;
+    z-index: 10;
+    box-shadow: 0 5px 10px rgba(6, 6, 6, 0.12), 0 15px 40px rgba(16, 16, 17, 0.08);
+}
+
+.no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+}
+
+.calendar_ {
+    width: 315px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-row-gap: 10px;
+    grid-auto-rows: 32px;
+    // grid-auto-columns: 32px;
+
+    .date {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        line-height: 32px;
+        text-align: center;
+        cursor: pointer;
+
+        &.today {
+            font-weight: bold;
+        }
+
+        &:hover {
+            .date-inner {
+                background-color: var(--concrete-grey);
+            }
+        }
+
+        &.selected {
+            color: var(--white);
+            .date-inner {
+                background-color: var(--brand-accent);
+            }
+        }
+
+        &.invalid {
+            color: var(--concrete-grey);
+            cursor: not-allowed;
+            &:hover {
+                .date-inner {
+                    background-color: transparent;
+                }
+            }
+        }
+
+        &.disabled {
+            color: var(--concrete-grey);
+            cursor: default;
+            &:hover {
+                .date-inner {
+                    background-color: transparent;
+                }
+            }
+        }
+
+        .date-inner {
+            width: 32px;
+            height: 32px;
+            z-index: 2;
+            border-radius: 50%;
+            color: black;
+        }
+
+        &.date-range {
+            background-color: var(--brand-accent-light);
+        }
+
+        &.date-range-start {
+            &:after {
+                content: "";
+                width: 80%;
+                height: 100%;
+                position: absolute;
+                right: 0;
+                border-top-left-radius: 50%;
+                border-bottom-left-radius: 50%;
+                background-color: var(--brand-accent-light);
+            }
+        }
+
+        &.date-range-end {
+            &:after {
+                content: "";
+                width: 80%;
+                height: 100%;
+                position: absolute;
+                left: 0;
+                border-top-right-radius: 50%;
+                border-bottom-right-radius: 50%;
+                background-color: var(--brand-accent-light);
+            }
+        }
+    }
+
+    // .empty-date {
+    //
+    // }
+}
+
+.weekdays {
+    width: 100%;
+    padding: 6px 0;
+    display: flex;
+    font-size: 14px;
+    font-weight: var(--medium-weight);
+    color: var(--rich-grey);
+    background-color: var(--off-white);
+
+    span {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+.single-calendar-view {
+    height: $calendarViewHeight;
+    padding: 0 12px 10px 12px;
+    position: relative;
+    background-color: var(--off-white);
+
+    .calendar {
+        max-width: 315px;
+        flex: 0.5;
+        background-color: var(--white);
+    }
+}
+
+.double-calendar-view {
+    width: $doubleViewWidth;
+    height: $calendarViewHeight;
+    padding: $doubleViewPadding;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: var(--off-white);
+
+    .switch-view-button {
+        right: 0px;
+    }
+
+    .double-month-picker {
+        flex: 1;
+    }
+
+    .calendar {
+        max-width: 315px;
+        flex: 0.5;
+        background-color: var(--white);
+    }
+}
+
+.double-clock-view,
+.double-calendar-view {
+    .switch-view-button {
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: calc(50% - 10px);
+        right: 0px;
+        fill: var(--rich-grey);
+        cursor: pointer;
+
+        &.disabled {
+            fill: var(--concrete-grey);
+            cursor: default;
+        }
+    } // End of .switch-view-button
+}
+
+.single-month-picker,
+.double-month-picker {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--off-white);
+
+    .month-name {
+        width: 140px;
+        font-size: 16px;
+        font-weight: var(--medium-weight);
+        color: var(--rich-grey);
+        text-align: center;
+        line-height: 30px;
+    }
+
+    .action {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        fill: var(--rich-grey);
+        cursor: pointer;
+
+        &.disabled {
+            fill: var(--concrete-grey);
+            cursor: default;
+        }
+    }
+
+    .today-button {
+        position: absolute;
+        top: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--brand-primary);
+        cursor: pointer;
+    }
+}
+
+.single-month-picker {
+    .today-button {
+        left: 12px;
+    }
+}
+
+.double-month-picker {
+    // width: 700px;
+    // min-width: 700px;
+    // max-width: 700px;
+    justify-content: space-between;
+
+    .today-button {
+        left: 24px;
+    }
+
+    .next-month,
+    .previous-month {
+        width: 320px;
+        height: 30px;
+        position: relative;
+        line-height: 30px;
+        text-align: center;
+
+        .action {
+            position: absolute;
+            top: 0;
+        }
+    }
+
+    .next-month > .action {
+        right: 20%;
+    }
+
+    .previous-month > .action {
+        left: 20%;
+    }
+}
+
+.double-clock-view {
+    width: $doubleViewWidth;
+    height: $calendarViewHeight;
+    padding: $doubleViewPadding;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--off-white);
+
+    &.hh,
+    &.hh_mm {
+        width: 400px;
+    }
+
+    &.hh_mm_ss {
+        width: 450px;
+    }
+
+    &.hh_mm_ss_mmmm {
+        width: 600px;
+    }
+
+    .switch-view-button {
+        left: 0px;
+    }
+}
+
+.single-clock-view {
+    // width: $doubleViewWidth;
+    height: $calendarViewHeight;
+    padding: $doubleViewPadding;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--off-white);
+
+    &.hh,
+    &.hh_mm {
+        width: 200px;
+    }
+
+    &.hh_mm_ss {
+        width: 250px;
+    }
+
+    &.hh_mm_ss_mmmm {
+        width: 300px;
+    }
+
+    .time-picker-container {
+        flex: 1;
+    }
+} // End of .single-clock-view
+
+.time-picker-container {
+    height: 100%;
+    flex: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+
+    .header {
+        font-size: 16px;
+        font-weight: var(--medium-weight);
+        color: var(--rich-grey);
+    }
+
+    .placeholder,
+    .date {
+        height: 20px;
+    }
+
+    .date {
+        font-size: 14px;
+        font-weight: var(--regular-weight);
+        color: var(--rich-grey);
+    }
+
+    .time-picker {
+        width: 100%;
+        flex: 0.7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--white);
+
+        .hours-picker,
+        .minutes-picker,
+        .seconds-picker,
+        .milliseconds-picker {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+
+            .time-input {
+                width: 40px;
+                margin: 0;
+                padding: 0;
+                border: none;
+                outline: none;
+                font-size: 34px;
+                font-weight: bold;
+                background: transparent;
+                font-family: 'Roboto', sans-serif;
+            } // End of .time-input
+
+            .button {
+                width: 30px;
+                height: 30px;
+                margin: 12px 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                fill: var(--brand-accent);
+                cursor: pointer;
+            } // End of .button
+        } // End of .*-picker
+
+        .milliseconds-picker {
+            .time-input {
+                width: 60px;
+            }
+        } // End of .milliseconds-picker
+
+        .time-separator {
+            font-size: 34px;
+            font-weight: var(--medium-weight);
+            margin: 0 8px;
+        } // End of .time-separator
+    } // End of .time-picker
+
+    .filler,
+    .checkbox {
+        flex: 0.1;
+    } // End of .filler and .checkbox flex size.
+
+    .checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        svg {
+            fill: var(--rich-grey);
+        }
+
+        .text {
+            margin-left: 8px;
+            font-size: 14px;
+            color: var(--rich-grey);
+        }
+    } // End of .checkbox
+} // End of .time-picker-container
+
+// other
+
+.horizontalBarChart {
+    padding: 3px 8px;
+    border: 1px solid #888;
+    width: 100%;
+    text-shadow: 2px 1px #c9c9c9;
+    box-shadow: 2px 2px #c0c0c0;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    color: #332a2a;
+    max-width: 30vw;
+    /* box-shadow: 0 2px 4px rgba(45, 47, 53, 0.05), 0 4px 8px rgba(57, 59, 66, 0.2); */
+}
+
+.flag {
+    border: 1px solid #888;
+    vertical-align: middle;
+    height: 22px !important;
+    width: 32px !important;
+}
+
+.flagcont {
+    text-align: right;
+}
+
+#sidebar nav a:before {
+    background: #3c2c62;
+}
+
+body {
+    background: #3d8095;
+}
+
+.MuiIconButton-root:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+.MuiIconButton-root {
+    flex: 0 0 auto;
+    color: rgba(0, 0, 0, 0.54);
+    padding: 2px;
+    overflow: visible;
+    font-size: 1.5rem;
+    text-align: center;
+    transition: background-color 750ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-radius: 50%;
+}
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 {
+    font-size: 18px;
+}
+.material-icons.md-30 {
+    font-size: 30px;
+}
+.material-icons.md-36 {
+    font-size: 36px;
+    margin: 0px -10px;
+    top: 3px;
+    position: relative;
+}
+.material-icons.md-48 {
+    font-size: 48px;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark {
+    color: rgba(0, 0, 0, 0.54);
+}
+.material-icons.md-dark:hover {
+    color: rgba(44, 44, 44, 0.54);
+}
+.material-icons.md-dark.md-inactive {
+    color: rgba(0, 0, 0, 0.26);
+}
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light {
+    color: rgba(255, 255, 255, 1);
+}
+.material-icons.md-light.md-inactive {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Table */
+
+.table-wrapper {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    border-left: 1px solid #ccc;
+    border-bottom: 3px solid #ccc;
+    font-size: 0.938em;
+    font-family: "黑體-繁", "蘋方-繁", "Heiti TC", "微軟正黑體", "Microsoft JhengHei", Arial, serif;
+}
+
+table {
+    width: 100%;
+    background-color: #e6e6e6;
+    margin: 1em 0;
+    box-shadow: 0 5px 10px rgba(45, 47, 53, 0.05), 0 15px 40px rgba(57, 59, 66, 0.2);
+}
+
+table tbody tr {
+    border: solid 1px rgba(255, 255, 255, 0.15);
+    border-left: 0;
+    border-right: 0;
+}
+
+table tbody tr:hover {
+    background-color: #c8bfafba !important;
+}
+
+table tbody tr:nth-child(2n + 1) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+table td {
+    padding: 0.1em 1em;
+    color: black;
+    border: solid 1px rgba(77, 77, 77, 0.15);
+    vertical-align: middle;
+}
+
+table th {
+    color: #403c3c;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 0.05em 0.45em;
+    text-align: left;
+    padding: 8px 8px;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+table thead {
+    border-bottom: solid 2px rgba(119, 119, 119, 0.15);
+}
+
+.wrapper.alt {
+    background-color: #261c3e;
+}
+
+.caption {
+    white-space: nowrap;
+}
+
+* {
+    transition: opacity 3s ease, transform 4s ease;
+}
+
+::placeholder {
+    color: black;
+    opacity: 1;
+}
+
+.wrapper.style1 {
+    background-color: #3d8095;
+}
+
+.wrapper.style1-alt {
+    background-color: #595a91;
+}
