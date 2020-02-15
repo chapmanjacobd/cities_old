@@ -402,7 +402,7 @@ doubleBarChartColumn : String -> (data -> Int) -> Int -> (data -> Int) -> Int ->
 doubleBarChartColumn name valueBad maxValueBad valueGood maxValueGood =
     Table.veryCustomColumn
         { name = name
-        , viewData = \data -> viewDoubleBarChart (String.fromInt (valueBad data)) (50 - abs (valueBad data // (maxValueBad // 100))) (String.fromInt (valueGood data)) ((valueGood data // (maxValueGood // 100)) + 50)
+        , viewData = \data -> viewDoubleBarChart (String.fromInt (max 0 (valueBad data))) (50 - abs (valueBad data // (maxValueBad // 100))) (String.fromInt (valueGood data)) ((valueGood data // (maxValueGood // 100)) + 50)
         , sorter =
             Table.decreasingOrIncreasingBy
                 (if String.contains "Risk" name then
@@ -492,9 +492,9 @@ viewDoubleBarTripleChart barChartLabelBad barChartPercentBadMin barChartPercentB
             [ class "horizontalBarChart"
             , style "background"
                 ("rgba(0, 0, 0, 0) linear-gradient(to right, rgb(236, 236, 236) "
-                    ++ String.fromInt barChartPercentBadMax
+                    ++ String.fromInt (max 0 barChartPercentBadMax)
                     ++ "%, rgb(200, 200, 200) "
-                    ++ String.fromInt barChartPercentBadMax
+                    ++ String.fromInt (max 0 barChartPercentBadMax)
                     ++ "%, rgb(181, 177, 177) 50%, rgb(0, 162, 0) 50%, rgb(178, 193, 174) "
                     ++ String.fromInt barChartPercentGoodMax
                     ++ "%, rgb(236, 236, 236) "
@@ -507,7 +507,7 @@ viewDoubleBarTripleChart barChartLabelBad barChartPercentBadMin barChartPercentB
             , style "justify-content" "space-between"
             ]
             [ Html.div [ style "marginRight" "20px" ]
-                [ text (String.fromInt barChartLabelBad)
+                [ text (String.fromInt (max 0 barChartLabelBad))
                 ]
             , Html.div []
                 [ text (String.fromInt barChartLabelGood)
@@ -854,7 +854,7 @@ config model =
             , barChartColumn "Total glwd3_marsh" "" (\rec -> rec.glwd3_marsh_sum + rec.glwd3_swamp_sum + rec.glwd3_bog_sum) 100
             , barChartColumn "Total glwd3_mangrove" "" (\rec -> rec.glwd3_mangrove_sum + rec.glwd3_wetland_sum + rec.glwd3_sometimes_wetland_sum + rec.glwd3_50_100_wetland_sum + rec.glwd3_25_50_wetland_sum + rec.glwd3_0_25_wetland_sum) 500
 
-        --    , stackedBarChartColumnRain "Average Monthly Rain (Jan. to Dec.)" .rain (countries |> List.concatMap .rain |> List.concat |> List.maximum |> Maybe.withDefault 0)
+            --    , stackedBarChartColumnRain "Average Monthly Rain (Jan. to Dec.)" .rain (countries |> List.concatMap .rain |> List.concat |> List.maximum |> Maybe.withDefault 0)
             -- -- , stackedBarChartColumnTemp "Average Monthly Temp. (Jan. to Dec.)" .tmp (countries |> List.concatMap .tmp |> List.concat |> List.maximum |> Maybe.withDefault 0)
             -- -- , stackedBarChartColumnSun "Average Monthly Sun (Jan. to Dec.)" .srad (countries |> List.concatMap .srad |> List.concat |> List.maximum |> Maybe.withDefault 0)
             -- -- , stackedBarChartColumnWind "Average Monthly Wind (Jan. to Dec.)" .wind (countries |> List.concatMap .wind |> List.concat |> List.maximum |> Maybe.withDefault 0)
@@ -1051,11 +1051,6 @@ searchPatternDecoder =
         |> optional "id" string ""
         |> optional "displayname" string ""
         |> optional "name" string ""
-
-
-toLabel : Search -> String
-toLabel search =
-    search.displayname
 
 
 searchCategories : List (Selectize.Entry Search)

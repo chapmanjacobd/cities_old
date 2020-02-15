@@ -16187,7 +16187,10 @@ var $author$project$Main$doubleBarChartColumn = F5(
 					return A4(
 						$author$project$Main$viewDoubleBarChart,
 						$elm$core$String$fromInt(
-							valueBad(data)),
+							A2(
+								$elm$core$Basics$max,
+								0,
+								valueBad(data))),
 						50 - $elm$core$Basics$abs(
 							(valueBad(data) / ((maxValueBad / 100) | 0)) | 0),
 						$elm$core$String$fromInt(
@@ -16212,7 +16215,9 @@ var $author$project$Main$viewDoubleBarTripleChart = F8(
 							A2(
 							$elm$html$Html$Attributes$style,
 							'background',
-							'rgba(0, 0, 0, 0) linear-gradient(to right, rgb(236, 236, 236) ' + ($elm$core$String$fromInt(barChartPercentBadMax) + ('%, rgb(200, 200, 200) ' + ($elm$core$String$fromInt(barChartPercentBadMax) + ('%, rgb(181, 177, 177) 50%, rgb(0, 162, 0) 50%, rgb(178, 193, 174) ' + ($elm$core$String$fromInt(barChartPercentGoodMax) + ('%, rgb(236, 236, 236) ' + ($elm$core$String$fromInt(barChartPercentGoodMax) + '%) repeat-y scroll 50% 100%')))))))),
+							'rgba(0, 0, 0, 0) linear-gradient(to right, rgb(236, 236, 236) ' + ($elm$core$String$fromInt(
+								A2($elm$core$Basics$max, 0, barChartPercentBadMax)) + ('%, rgb(200, 200, 200) ' + ($elm$core$String$fromInt(
+								A2($elm$core$Basics$max, 0, barChartPercentBadMax)) + ('%, rgb(181, 177, 177) 50%, rgb(0, 162, 0) 50%, rgb(178, 193, 174) ' + ($elm$core$String$fromInt(barChartPercentGoodMax) + ('%, rgb(236, 236, 236) ' + ($elm$core$String$fromInt(barChartPercentGoodMax) + '%) repeat-y scroll 50% 100%')))))))),
 							A2($elm$html$Html$Attributes$style, 'background-position', '50% 100%'),
 							A2($elm$html$Html$Attributes$style, 'background-repeat', 'repeat-y'),
 							A2($elm$html$Html$Attributes$style, 'display', 'flex'),
@@ -16229,7 +16234,8 @@ var $author$project$Main$viewDoubleBarTripleChart = F8(
 							_List_fromArray(
 								[
 									$elm$html$Html$text(
-									$elm$core$String$fromInt(barChartLabelBad))
+									$elm$core$String$fromInt(
+										A2($elm$core$Basics$max, 0, barChartLabelBad)))
 								])),
 							A2(
 							$elm$html$Html$div,
@@ -16426,8 +16432,6 @@ var $author$project$Main$flagColumn = F2(
 				}
 			});
 	});
-var $billstclair$elm_sortable_table$Table$None = {$: 'None'};
-var $billstclair$elm_sortable_table$Table$unsortable = $billstclair$elm_sortable_table$Table$None;
 var $elm$html$Html$i = _VirtualDom_node('i');
 var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
 var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
@@ -16466,7 +16470,7 @@ var $author$project$Main$materialUIColumn = F3(
 		return $billstclair$elm_sortable_table$Table$veryCustomColumn(
 			{
 				name: name,
-				sorter: $billstclair$elm_sortable_table$Table$unsortable,
+				sorter: $billstclair$elm_sortable_table$Table$decreasingOrIncreasingBy(value),
 				viewData: function (data) {
 					return A2(
 						$author$project$Main$viewMaterialUILink,
